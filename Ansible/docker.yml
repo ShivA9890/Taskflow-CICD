@@ -1,0 +1,61 @@
+---
+ - name: Installing dependencied on Worker Nodes
+   hosts: tag_Jenkins_Workers
+   become: yes
+
+   tasks:
+    - name: System update
+      apt:
+       update_cache: yes
+
+    - name: Install Docker
+      apt:
+       name: docker.io
+       state: present
+
+    - name: Start Docker service
+      service:
+       name: docker
+       state: started
+       enabled: yes
+
+    - name: Add jenkins user to Docker
+      user:
+       name: "{{ item }}"
+       groups: docker
+       append: yes
+      loop:
+        - jenkins
+        - ubuntu
+      notify: "restart the Jenkins"
+
+    - name: Download Maven 
+      apt:
+        name: maven
+        state: present
+        update_cache: yes
+
+    - name: Install python-3-venv
+      apt:
+       name: python3-venv
+       state: present
+       update_cache: yes
+
+    - name: Install ZIP and UNZIP
+      apt:
+       name:
+        - zip 
+        - unzip
+       state: present
+       update_cache: yes
+    
+    - name: Install Trivy vulnerability scanner
+      shell: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      args:
+        creates: /usr/local/bin/trivy
+      become: yes
+
+   handlers:
+    - import_tasks: handlers.yml
+
+    

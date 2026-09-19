@@ -1,0 +1,69 @@
+---
+- name: Jenkins download for JENKINS CONTROLLER
+  hosts: tag_Jenkins_controller
+  become: yes
+
+  tasks:
+   - name: system update
+     apt:
+      update_cache: yes
+
+   - name: Install JAVA 
+     apt: 
+      name: openjdk-21-jre
+      state: present
+
+   - name: download offical jenkins key
+     get_url:
+      url: https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+      dest: /usr/share/keyrings/jenkins-keyring.asc
+      mode: '0644'
+      force: yes
+   
+   - name: 4. Add the Jenkins repository safely
+     shell: echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" > /etc/apt/sources.list.d/jenkins.list
+
+   - name: Install Jenkins
+     apt:
+       name: jenkins
+       state: present
+       update_cache: yes
+
+   - name: Start the jenkins server
+     service:
+      name: jenkins
+      state: started
+      enabled: yes
+
+   - name: Getting password
+     command: cat /var/lib/jenkins/secrets/initialAdminPassword
+     register: admin_password_encoded
+
+   - name: display password
+     debug:
+      msg: "{{ admin_password_encoded.stdout }}"
+
+- name: Download JAVA for Jenkins Woker
+  hosts: tag_Jenkins_Workers
+  become: yes
+
+  tasks:
+   - name: Update system
+     apt:
+      update_cache: yes
+
+   - name: Download JAVA
+     apt:
+      name: openjdk-21-jdk
+      state: present
+      update_cache: yes
+  
+   - name: Create jenkins agent dir
+     file:
+      path: /data/jenkins
+      state: directory
+      owner: ubuntu
+      group: ubuntu
+      mode: '0755'
+  
+   

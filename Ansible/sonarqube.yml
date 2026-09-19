@@ -1,0 +1,84 @@
+---
+ - name: "Sonarqube worker"
+   hosts: tag_sonarqube
+   become: yes
+
+   tasks:
+    - name: "system update"
+      apt: 
+       update_cache: yes
+    
+    - name: "Install JAVA"
+      apt: 
+       name: 
+        - openjdk-21-jdk
+        - unzip
+        - maven 
+       state: present
+       update_cache: yes
+    
+    - name: Create jenkins agent dir
+      file:
+       path: /data/jenkins
+       state: directory
+       owner: ubuntu
+       group: ubuntu
+       mode: '0755'
+
+    - name: "create user"
+      user:
+       name: sonar
+       state: present
+
+
+    - name: "create group"
+      group:
+       name: sonar
+       state: present
+
+    - name: "Configure kernel for Elasticsearch" # Recommend because the search was failing
+      sysctl:
+        name: vm.max_map_count
+        value: '262144'
+        state: present
+        reload: yes
+    
+    - name: "Install sonarqube package"
+      get_url:
+       url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-26.9.0.129388.zip?_gl=1*1c7f5pr*_gcl_au*MTM4MDY1ODEzNS4xNzg4NTExOTk2Li0uLS4xNzg4NTExOTk2LjE4MDU4MzMyMDkuMTc4ODUxMTk5Ny4xNzg4NTEyMDA3*_ga*MTI4MDM5ODM4Ny4xNzg4NTExOTk3*_ga_9JZ0GZ5TC6*czE3ODg1MTE5OTYkbzEkZzEkdDE3ODg1MTIwMDckajUxJGwwJGgw"
+       dest: /opt/sonarqube-26.9.0.129388.zip
+       
+
+    - name: "unzip the sonarqube"
+      unarchive:
+       src: /opt/sonarqube-26.9.0.129388.zip
+       dest: /opt
+       owner: sonar
+       group: sonar
+       remote_src: yes
+       mode: "0755"
+      notify: "run the sonarqube"
+    
+    - name: "Installing sonarscanner"
+      unarchive:
+       src: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-8.0.1.6346-linux-x64.zip
+       dest: /opt
+       remote_src: yes
+       owner: sonar
+       group: sonar
+       creates: /opt/sonar-scanner-8.0.1.6346-linux-x64
+
+    - name: "Create a system-wide symlink for sonar-scanner"
+      file:
+        src: /opt/sonar-scanner-8.0.1.6346-linux-x64/bin/sonar-scanner
+        dest: /usr/bin/sonar-scanner
+        state: link
+
+
+
+   handlers:
+    - import_tasks: handlers.yml
+
+    
+
+      

@@ -1,0 +1,11 @@
+---
+- name: "restart the Jenkins"
+  service:
+    name: jenkins
+    state: restarted
+  delegate_to: "{{ groups['tag_Jenkins_controller'][0] }}"
+  run_once: true
+
+- name: "run the sonarqube"
+  shell: su - sonar -c "cd /opt/sonarqube-26.9.0.129388/bin/linux-x86-64 && ./sonar.sh start "
+  become: yes
