@@ -123,3 +123,15 @@ resource "aws_security_group" "rds_sg" {
   }
 
 }
+
+resource "aws_security_group_rule" "eks_api_connect" {
+
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"] 
+  security_group_id = aws_eks_cluster.taskflow_eks.vpc_config[0].cluster_security_group_id
+  description       = "Allow inbound HTTPS traffic to EKS API Server"
+  
+}

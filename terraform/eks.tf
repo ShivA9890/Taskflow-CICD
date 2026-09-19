@@ -21,10 +21,14 @@ resource "aws_iam_role_policy_attachment" "eks_role_policy" {
 resource "aws_eks_cluster" "taskflow_eks" {
   name     = "taskflow_cluster"
   role_arn = aws_iam_role.eks_role.arn
-  version  = "1.26"
+  version  = "1.30"
 
   vpc_config {
     subnet_ids = module.vpc.public_subnets
+  }
+  access_config {
+    authentication_mode = "API_AND_CONFIG_MAP"
+    bootstrap_cluster_creator_admin_permissions = true
   }
 
   depends_on = [
