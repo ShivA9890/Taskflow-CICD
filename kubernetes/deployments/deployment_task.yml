@@ -1,7 +1,7 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: task_service
+  name: task-service
   namespace: taskflow
 
 spec:
@@ -16,7 +16,7 @@ spec:
     
     spec:
       containers:
-        - name: task_service
+        - name: task-service
           image: shivam1481/task-service:v1
           ports:
             - containerPort: 8082

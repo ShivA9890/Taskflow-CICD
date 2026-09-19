@@ -28,7 +28,7 @@ spec:
                   key: IDENTITY_DB_DSN
           envFrom:
             - configMapRef:
-                name: python_env
+                name: python-env
 
           resources:
             requests:
