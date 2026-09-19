@@ -1,0 +1,15 @@
+aws eks update-kubeconfig --region ap-south-1 --name taskflow_cluster
+
+output something like this: Updated context arn:aws:eks:ap-south-1:007267919424:cluster/taskflow_cluster in C:\Users\Shivam\.kube\config
+
+Test communication with the control plane
+
+kubectl cluster-info
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/aws/deploy.yaml
+
+pod interactive: 
+
+kubectl exec -it pod-name -n namespace -- /bin/bash 
+
+==================================================
