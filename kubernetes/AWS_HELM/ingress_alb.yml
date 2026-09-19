@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: taskflow-ingress
+  namespace: taskflow
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/v1/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: identity-service
+                port:
+                  number: 8081
+                  
+          - path: /api/v1/tasks
+            pathType: Prefix
+            backend:
+              service:
+                name: task-service
+                port:
+                  number: 8082
+                  
+          - path: /api/v1/activity
+            pathType: Prefix
+            backend:
+              service:
+                name: activity
+                port:
+                  number: 8000
+                  
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: taskflow-web
+                port:
+                  number: 80

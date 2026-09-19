@@ -1,0 +1,41 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata: 
+  name: reminder
+  namespace: taskflow
+
+spec:
+  schedule: "5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: reminder 
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: reminder
+              image: shivam1481/taskflow-python:v1
+              args: ["reminder.job"]
+
+              env:
+               - name: INTERNAL_SERVICE_TOKEN
+                 valueFrom:
+                  secretKeyRef:
+                    name: taskflow-secrets
+                    key: INTERNAL_SERVICE_TOKEN
+
+              envFrom:
+                - configMapRef:
+                  name: python_env
+
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "64Mi"
+
+                limits:
+                  cpu: "200m"
+                  memory: "256Mi"
+

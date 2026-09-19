@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1 
+metadata: 
+  name: activity
+  namespace: taskflow
+
+spec:
+  type: ClusterIP
+  selector:
+   app: activity
+  ports:
+    - name: activity-python
+      targetPort: 8000
+      port: 8000
+      protocol: TCP

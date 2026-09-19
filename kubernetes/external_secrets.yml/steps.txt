@@ -1,0 +1,16 @@
+helm repo add external-secrets https://charts.external-secrets.io
+helm repo update
+
+helm install external-secrets external-secrets/external-secrets \
+  -n external-secrets \
+  --create-namespace \
+  --set installCRDs=true
+
+  kubectl apply -f eso-setup.yml
+
+
+  steps to save cred
+
+  Store a new secret and choose Other type of secret
+  Add four Key/Value pairs
+  name the secret exactly taskflow/prod-secrets, and save it.

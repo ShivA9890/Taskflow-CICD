@@ -1,0 +1,15 @@
+kind: Service 
+apiVersion: v1 
+metadata: 
+  name: service-web
+  namespace: taskflow 
+
+spec:
+  type: ClusterIP
+  ports:
+    - name: web
+      protocol: TCP
+      targetPort: 80
+      port: 80
+  selector:
+    app: taskflow-web 

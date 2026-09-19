@@ -1,0 +1,17 @@
+clusterName: "taskflow_cluster" 
+
+serviceAccount:
+  create: true
+  name: "aws-load-balancer-controller"
+
+env:
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: aws-lbc-keys
+        key: AWS_ACCESS_KEY_ID
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: aws-lbc-keys
+        key: AWS_SECRET_ACCESS_KEY

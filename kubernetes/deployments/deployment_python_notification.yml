@@ -1,0 +1,40 @@
+kind: Deployment
+apiVersion: apps/v1 
+metadata:
+  name: notification
+  namespace: taskflow
+
+spec:
+  selector:
+    matchLabels:
+      app: notification
+
+  template:
+    metadata:
+      labels: 
+        app: notification
+
+    spec:
+      containers:
+        - name: notification
+          image: shivam1481/taskflow-python:v1
+          args: ["notification.worker"]
+
+          env:
+            - name: IDENTITY_DB_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: taskflow-secrets
+                  key: IDENTITY_DB_DSN
+          envFrom:
+            - configMapRef:
+                name: python_env
+
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+
+            limits:
+              cpu: "200m"
+              memory: "256Mi"

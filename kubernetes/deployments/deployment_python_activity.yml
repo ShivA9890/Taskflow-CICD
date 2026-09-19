@@ -1,0 +1,52 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: activity
+  namespace: taskflow
+
+spec:
+  selector:
+    matchLabels:
+     app: activity
+
+  template:
+    metadata:
+      labels:
+        app: activity
+
+    spec:
+      containers:
+        - name: activity
+          image: shivam1481/taskflow-python:v1
+          args: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+          ports:
+            - containerPort: 8000
+
+          envFrom:
+            - configMapRef:
+                name: python_env
+
+          resources:
+            requests: 
+              cpu: "50m"
+              memory: "64Mi"
+
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8000
+            initialDelaySeconds: 25
+            periodSeconds: 10
+            failureThreshold: 3

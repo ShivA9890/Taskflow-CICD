@@ -1,0 +1,58 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: identity_service
+  namespace: taskflow
+
+spec:
+   selector:
+    matchLabels:
+      app: identity-service
+
+   template:
+    metadata:
+      labels:
+        app: identity-service
+    
+    spec:
+      containers:
+        - name: identity_service
+          image: shivam1481/identity-service:v1
+          ports:
+           - containerPort: 8081
+
+          env: 
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: taskflow-secrets
+                  key: SPRING_DATASOURCE_PASSWORD
+          
+          envFrom:
+           - configMapRef:
+              name: identity-java-env
+              
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 3
+

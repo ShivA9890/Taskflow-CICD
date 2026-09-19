@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: task_service
+  namespace: taskflow
+
+spec:
+  selector:
+    matchLabels:
+      app: task-service
+
+  template:
+    metadata:
+      labels:
+        app: task-service
+    
+    spec:
+      containers:
+        - name: task_service
+          image: shivam1481/task-service:v1
+          ports:
+            - containerPort: 8082
+          
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: taskflow-secrets
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: TASKFLOW_INTERNAL_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: taskflow-secrets
+                  key: INTERNAL_SERVICE_TOKEN
+
+          envFrom:
+            - configMapRef:
+                name: tasks-java-env
+
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+
+            limits:
+              cpu: "200m"
+              memory: "512Mi"
+          
+          readinessProbe: 
+            httpGet:
+              path: /actuator/health
+              port: 8082
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              ports: 8082
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 3

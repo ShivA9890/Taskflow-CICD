@@ -1,0 +1,47 @@
+# this method is the simplest way using github url to and apply layer 4 NLB and routing using nginx
+# it bypasses the need of IRSM and Helm chart to install and create ALB and also create a load balancer yml file which is cloud independent
+
+###
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/aws/deploy.yaml
+###
+
+Kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: taskflow-ingress
+  namespace: taskflow
+  annotations: 
+    kubernetes.io/ingress.class: "nginx"
+
+spec:
+  rules:
+    - http: 
+        paths: 
+          - path: /api/v1/auth
+            pathType: prefix
+            backend:
+              service:
+                name: identity-service
+                port:
+                  number: 8081
+          - path: /api/v1/tasks
+            pathType: prefix
+            backend:
+              service:
+                name: task-service
+                port:
+                  number: 8082
+          - path: /api/v1/activity
+            pathType: prefix
+            backend:
+              service:
+                name: activity
+                port:
+                  name: 8000
+          - path: /
+            pathType: prefix
+            backend:
+              service:
+                name: taskflow-web
+                port:
+                  name: 80

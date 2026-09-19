@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1 
+metadata: 
+  name: task-service
+  namespace: taskflow
+
+spec:
+  ports:
+    - name: task-service
+      targetPort: 8082
+      port: 8082
+      protocol: TCP
+  selector:
+    app: task-service
+  type: ClusterIP
