@@ -55,3 +55,7 @@ spec:
         - name: jwt-key-volume
           secret:
             secretName: jwt-key-secret
+    ## Run this command before applying deployment 
+    ## kubectl create secret generic jwt-key-secret \
+    ## --namespace=taskflow \
+    ## --from-file=jwt-private.pem=./path/to/your/actual-key-file.pem
