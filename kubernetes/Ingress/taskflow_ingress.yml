@@ -5,43 +5,47 @@
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/aws/deploy.yaml
 ###
 
-Kind: Ingress
+kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
   name: taskflow-ingress
   namespace: taskflow
-  annotations: 
-    kubernetes.io/ingress.class: "nginx"
 
 spec:
+  ingressClassName: nginx
   rules:
     - http: 
         paths: 
-          - path: /api/v1/auth
-            pathType: prefix
+          - path: /api/v1/
+            pathType: Prefix
             backend:
               service:
                 name: identity-service
                 port:
                   number: 8081
           - path: /api/v1/tasks
-            pathType: prefix
+            pathType: Prefix
             backend:
               service:
                 name: task-service
                 port:
                   number: 8082
           - path: /api/v1/activity
-            pathType: prefix
+            pathType: Prefix
             backend:
               service:
                 name: activity
                 port:
-                  name: 8000
+                  number: 8000
           - path: /
-            pathType: prefix
+            pathType: Prefix
             backend:
               service:
-                name: taskflow-web
+                name: service-web
                 port:
-                  name: 80
+                  number: 80
+
+
+# Load balancer 
+# Run this commnad
+# kubectl annotate svc ingress-nginx-controller -n ingress-nginx service.beta.kubernetes.io/aws-load-balancer-type-

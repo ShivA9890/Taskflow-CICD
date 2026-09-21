@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: notification
-          image: shivam1481/taskflow-python:v1
-          args: ["notification.worker"]
+          image: shivam1481/taskflow-python:6
+          args: ["notification_service.worker"]
 
           env:
             - name: IDENTITY_DB_DSN

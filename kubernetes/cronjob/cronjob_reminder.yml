@@ -16,8 +16,8 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: reminder
-              image: shivam1481/taskflow-python:v1
-              args: ["reminder.job"]
+              image: shivam1481/taskflow-python:6
+              args: ["reminder_job.job"]
 
               env:
                - name: INTERNAL_SERVICE_TOKEN
@@ -28,7 +28,7 @@ spec:
 
               envFrom:
                 - configMapRef:
-                  name: python_env
+                   name: python_env
 
               resources:
                 requests:

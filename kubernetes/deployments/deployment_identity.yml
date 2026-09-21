@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: identity-service
-          image: shivam1481/identity-service:v1
+          image: shivam1481/identity-service:6
           ports:
             - containerPort: 8081
           env: 
@@ -58,4 +58,4 @@ spec:
     ## Run this command before applying deployment 
     ## kubectl create secret generic jwt-key-secret \
     ## --namespace=taskflow \
-    ## --from-file=jwt-private.pem=./path/to/your/actual-key-file.pem
+    ## --from-file=jwt-private.pem=C:\Users\Shivam\Desktop\Taskflow\identity-service\keys\jwt-private.pem

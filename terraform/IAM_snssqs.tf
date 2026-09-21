@@ -14,7 +14,7 @@ resource "aws_iam_role_policy" "iam_role_snssqsdynamodb" {
       {
         Effect = "Allow"
         Action = [
-          "sqs:RecieveMessage",
+          "sqs:ReceiveMessage",
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes"
         ]

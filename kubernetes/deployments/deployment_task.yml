@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: task-service
-          image: shivam1481/task-service:v1
+          image: shivam1481/task-service:6
           ports:
             - containerPort: 8082
           
@@ -57,7 +57,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health
-              ports: 8082
+              port: 8082
             initialDelaySeconds: 60
             periodSeconds: 20
             failureThreshold: 3

@@ -5,7 +5,7 @@ resource "random_password" "db_password" {
 }
 
 resource "aws_secretsmanager_secret" "db_secret" {
-  name = "taskflow_credential"
+  name = "taskflow_credentials_2"
 }
 
 resource "aws_secretsmanager_secret_version" "db_secret_v" {

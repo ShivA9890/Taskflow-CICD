@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: activity
-          image: shivam1481/taskflow-python:v1
-          args: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+          image: shivam1481/taskflow-python:6
+          args: ["uvicorn", "activity_service.main:app", "--host", "0.0.0.0", "--port", "8000"]
           ports:
             - containerPort: 8000
 
