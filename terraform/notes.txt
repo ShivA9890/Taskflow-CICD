@@ -1,0 +1,6 @@
+bydefault rds creates a database but for our project we requires 2 database 
+so create a instance in vpc public subnet 
+run 
+apt-get install postgresql-client
+psql -h <YOUR_RDS_ENDPOINT> -U taskflow_admin -d postgres
+then in postgres run: CREATE DATABASE taskflow_tasks;

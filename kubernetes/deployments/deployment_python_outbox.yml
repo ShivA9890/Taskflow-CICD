@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: outbox
-          image: shivam1481/taskflow-python:v1
+          image: shivam1481/taskflow-python:6
 
           env:
             - name: IDENTITY_DB_DSN

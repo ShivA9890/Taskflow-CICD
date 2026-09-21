@@ -1,7 +1,7 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: taskflow_web
+  name: taskflow-web
   namespace: taskflow
 
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: shivam1481/taskflow-web:v1
+          image: shivam1481/taskflow-web:6
           ports: 
             - containerPort: 80
 

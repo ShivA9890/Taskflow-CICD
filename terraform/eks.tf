@@ -21,7 +21,7 @@ resource "aws_iam_role_policy_attachment" "eks_role_policy" {
 resource "aws_eks_cluster" "taskflow_eks" {
   name     = "taskflow_cluster"
   role_arn = aws_iam_role.eks_role.arn
-  version  = "1.36"
+  version  = "1.30"
 
   vpc_config {
     subnet_ids = module.vpc.public_subnets
